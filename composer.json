@@ -1,0 +1,21 @@
+{
+    "name": "tarre/laravel-scout-refresh",
+    "description": "Flush and import all models with the \"Searchable\" trait",
+    "type": "metapackage",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tarre",
+            "email": "tarre.islam@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "laravel/scout": ">=6.0.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tarre\\LaravelScoutRefresh\\": "src/"
+        }
+    }
+}

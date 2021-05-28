@@ -7,7 +7,7 @@ Refresh all your models containing the `searchable` trait
 **1. Install with composer**
 
 ```
-composer require tarre/laravel-46elks
+composer require tarre/laravel-scout-refresh
 ```
 
 **2. Add class to `App\Console\Kernel.php`**

@@ -9,7 +9,7 @@
             "email": "tarre.islam@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "require": {
         "laravel/scout": ">=6.0.0"
     },

@@ -17,7 +17,7 @@ class ScoutRefreshAllCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'scout:refresh-all';
+    protected $signature = 'scout:refresh-all {--dir=app} {--namespace=App}';
 
     /**
      * The console command description.
@@ -80,7 +80,11 @@ class ScoutRefreshAllCommand extends Command
      */
     protected function getClassNameFromSplFileInfo(SplFileInfo $fileInfo)
     {
-        $className = preg_replace('/^app/', 'App', $fileInfo->getPathname());
+        $dir = str_replace('\\', '/', $this->option('dir'));
+        $dir = str_replace('/', '\/', $dir);
+        $ns = $this->option('namespace');
+
+        $className = preg_replace("/^$dir/", $ns, $fileInfo->getPathname());
         $className = str_replace('.php', '', $className);
         $className = str_replace(DIRECTORY_SEPARATOR, '\\', $className);
         $className = "\\$className";
@@ -103,7 +107,7 @@ class ScoutRefreshAllCommand extends Command
      */
     protected function getFilesFromDirectory()
     {
-        $files = File::allFiles('app');
+        $files = File::allFiles($this->option('dir'));
 
         return collect($files);
     }
@@ -111,6 +115,18 @@ class ScoutRefreshAllCommand extends Command
     protected function handleFile(SplFileInfo $fileInfo)
     {
         $class = $this->getClassNameFromSplFileInfo($fileInfo);
+
+        /*
+         * Ignore interfaces
+         */
+        if (interface_exists($class)) {
+            return;
+        }
+
+        if (!class_exists($class)) {
+            $this->warn("Failed to find class \"$class\", try append --dir= and --namespace");
+            return;
+        }
 
         if ($this->hasTrait($class, Searchable::class)) {
             $this->scoutCmd('flush', $class);
